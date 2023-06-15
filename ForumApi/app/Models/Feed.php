@@ -20,6 +20,11 @@ class Feed extends Model
         'liked',
     ];
 
+    public function getLikedAttribute(): bool
+    {
+        return $this->likes()->where('feed_id', $this->id)->where('user_id', auth()->id())->exists();
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -30,8 +35,8 @@ class Feed extends Model
         return $this->hasMany(Like::class);
     }
 
-    public function getLikedAttribute(): bool
+    public function comments(): HasMany
     {
-        return $this->likes()->where('feed_id', $this->id)->where('user_id', auth()->id())->exists();
+        return $this->hasMany(Comment::class);
     }
 }
